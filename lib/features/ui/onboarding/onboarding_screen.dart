@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_routes.dart';
 import '../../../core/utils/app_styles.dart';
@@ -110,7 +111,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void next() {
     if (index == onboardingImages.length - 1) {
-      Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
+      Navigator.pushReplacementNamed(context, AppRoutes.loginRouteName);
     } else {
       controller.nextPage(
         duration: const Duration(milliseconds: 300),
