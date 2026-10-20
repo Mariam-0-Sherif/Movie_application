@@ -1,4 +1,4 @@
-import 'package:movie_application/home/widgets/movies_carousel.dart';
+import 'package:movie_application/features/ui/home/widgets/movies_carousel.dart';
 
 /// Temporary data until the movies API is connected.
 const List<CarouselMovie> mockMovies = [

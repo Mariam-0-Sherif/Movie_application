@@ -1,13 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_routes.dart';
 import 'package:movie_application/core/utils/app_theme.dart';
-import 'package:movie_application/home/home_screen.dart';
 import 'package:movie_application/features/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:movie_application/features/ui/auth/login/login_screen.dart';
 import 'package:movie_application/features/ui/auth/register/register_screen.dart';
 import 'package:movie_application/features/ui/onboarding/onboarding_screen.dart';
+
+import 'features/ui/home/home_screen.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
