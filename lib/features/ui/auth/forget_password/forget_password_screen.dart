@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_images.dart';
-import '../../../../core/utils/app_styles.dart';
-import '../../../../core/utils/size_utils.dart';
-import '../../../../core/utils/validators.dart';
-import '../../../../core/widgets/custom_elevated_button.dart';
-import '../../../../core/widgets/custom_image_asset.dart';
-import '../../../../core/widgets/custom_text_form_field.dart';
+import 'package:movie_application/core/utils/app_colors.dart';
+import 'package:movie_application/core/utils/app_images.dart';
+import 'package:movie_application/core/utils/size_utils.dart';
+import 'package:movie_application/core/widgets/custom_elevated_button.dart';
+import 'package:movie_application/core/widgets/custom_text_form_field.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -19,6 +15,19 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
+
+  // function mo5tasara bta5od raqam el Figma w trg3o 3ala 7asab 3ard el screen
+  double w(double value) => SizeUtils.getWidth(context, value);
+
+  // nafs el fekra bas lel tool
+  double h(double value) => SizeUtils.getHeight(context, value);
+
+  // zorar Verify Email: delwa2ty bas bn3mel validate, el Firebase b3dein
+  void verifyEmail() {
+    if (formKey.currentState!.validate()) {
+      // TODO: ba3t email el reset 3an tare2 Firebase
+    }
+  }
 
   @override
   void dispose() {
@@ -34,44 +43,74 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back, color: AppColors.yellowColor),
         ),
-        title: Text('Forget Password', style: AppStyles.regular16YellowRoboto),
+        title: Text(
+          'Forget Password',
+          style: TextStyle(color: AppColors.yellowColor, fontSize: w(16)),
+        ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          horizontal: SizeUtils.getWidth(context, 16),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: w(16)),
         child: Form(
           key: formKey,
           child: Column(
-            spacing: SizeUtils.getHeight(context, 24),
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.asset(AppImages.forgetPassImagePath),
+              SizedBox(height: h(40)),
+
+              // el soura el kebeera
+              Image.asset(
+                AppImages.forgetPassImagePath,
+                width: double.infinity,
+                height: h(400),
+                fit: BoxFit.contain,
+              ),
+
+              SizedBox(height: h(24)),
+
+              // field el email
               CustomTextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 filled: true,
                 fillColor: AppColors.darkGreyColor,
                 borderSideColor: AppColors.darkGreyColor,
-                cursorColor: AppColors.whiteColor,
-                style: AppStyles.regular16WhiteRoboto,
+                style: TextStyle(color: AppColors.whiteColor, fontSize: w(16)),
                 hintText: 'Email',
-                hintStyle: AppStyles.regular16WhiteRoboto,
-                prefixIcon: CustomImageAsset(
-                  path: AppImages.emailIconImagePath,
+                hintStyle: TextStyle(
+                  color: AppColors.whiteColor,
+                  fontSize: w(16),
                 ),
-                validator: (p0) => Validators.validateEmail(p0),
+                prefixIcon: const Icon(
+                  Icons.email,
+                  color: AppColors.whiteColor,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
               ),
-              CustomElevatedButton(
-                onPressed: () {},
-                backgroundColor: AppColors.yellowColor,
-                radius: SizeUtils.getWidth(context, 15),
-                padding: EdgeInsets.symmetric(
-                  vertical: SizeUtils.getHeight(context, 12),
-                ),
-                child: Text(
-                  'Verify Email',
-                  style: AppStyles.regular20BlackRoboto,
+
+              SizedBox(height: h(24)),
+
+              // zorar Verify Email
+              SizedBox(
+                width: double.infinity,
+                height: h(56),
+                child: CustomElevatedButton(
+                  onPressed: verifyEmail,
+                  backgroundColor: AppColors.yellowColor,
+                  radius: w(16),
+                  child: Text(
+                    'Verify Email',
+                    style: TextStyle(
+                      color: AppColors.blackColor,
+                      fontSize: w(20),
+                    ),
+                  ),
                 ),
               ),
             ],
