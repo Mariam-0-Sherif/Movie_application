@@ -8,6 +8,7 @@ import 'package:movie_application/features/ui/home/tabs/home_tab.dart';
 import 'package:movie_application/features/ui/home/tabs/profile_tab.dart';
 import 'package:movie_application/features/ui/home/tabs/search_tab.dart';
 
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
