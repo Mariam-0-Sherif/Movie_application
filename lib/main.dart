@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movie_application/features/ui/auth/forget_password/forget_password_screen.dart';
+import 'package:movie_application/features/ui/auth/login/login_screen.dart';
+import 'package:movie_application/features/ui/auth/register/register_screen.dart';
 
 import 'core/utils/app_routes.dart';
 import 'core/utils/app_theme.dart';
@@ -18,6 +21,9 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRoutes.onboardingRouteName,
       routes: {
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
+        AppRoutes.loginRouteName: (context) => LoginScreen(),
+        AppRoutes.forgetPasswordRouteName: (context) => ForgetPasswordScreen(),
+        AppRoutes.registerRouteName: (context) => RegisterScreen(),
       },
       theme: AppTheme.darkTheme,
     );
