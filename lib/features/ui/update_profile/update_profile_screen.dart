@@ -46,7 +46,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   void _updateData() {
     if (!_formKey.currentState!.validate()) return;
-    // TODO: save the new data once the auth cubit is ready.
   }
 
   @override
