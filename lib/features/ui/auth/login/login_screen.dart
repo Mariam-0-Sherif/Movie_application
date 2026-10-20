@@ -4,7 +4,6 @@ import 'package:movie_application/core/utils/validators.dart';
 import 'package:movie_application/features/ui/auth/login/widget/divider_or_divider.dart';
 import 'package:movie_application/features/ui/auth/widget/bottom_sheet.dart';
 import 'package:movie_application/features/ui/auth/widget/build.dart';
-
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_routes.dart';
