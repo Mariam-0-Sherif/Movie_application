@@ -3,10 +3,11 @@ import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_images.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
 import 'package:movie_application/core/widgets/custom_image_asset.dart';
-import 'package:movie_application/features/ui/home/tabs/explore_tab/explore_tab.dart';
-import 'package:movie_application/features/ui/home/tabs/home_tab/home_tab.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab/profile_tab.dart';
-import 'package:movie_application/features/ui/home/tabs/search_tab/search_tab.dart';
+import 'package:movie_application/features/ui/home/tabs/explore_tab.dart';
+import 'package:movie_application/features/ui/home/tabs/home_tab.dart';
+import 'package:movie_application/features/ui/home/tabs/profile_tab.dart';
+import 'package:movie_application/features/ui/home/tabs/search_tab.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
