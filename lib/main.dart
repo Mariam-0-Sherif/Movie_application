@@ -8,6 +8,7 @@ import 'package:movie_application/features/ui/auth/register/register_screen.dart
 import 'package:movie_application/features/ui/onboarding/onboarding_screen.dart';
 
 import 'features/ui/home/home_screen.dart';
+import 'features/ui/update_profile/update_profile_screen.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.loginRouteName: (context) => LoginScreen(),
         AppRoutes.registerRouteName: (context) => RegisterScreen(),
         AppRoutes.forgetPasswordRouteName: (context) => ForgetPasswordScreen(),
+        AppRoutes.updateProfileRouteName: (context) =>
+        const UpdateProfileScreen(),
       },
     );
   }
