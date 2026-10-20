@@ -42,4 +42,6 @@ class AppImages {
   static const String passwordIconImagePath = '${_basePath}pass_icon.png';
   static const String phoneIconImagePath = '${_basePath}phone_icon.png';
   static const String searchImagePath = '${_basePath}search_image.png';
+  static const String availableNowImagePath = '${_basePath}available_now.png';
+  static const String watchNowImagePath = '${_basePath}watch_now.png';
 }
