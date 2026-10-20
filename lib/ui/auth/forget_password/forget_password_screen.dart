@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/ui/widgets/custom_elevated_button.dart';
-import 'package:movie_app/ui/widgets/custom_text_form_field.dart';
-import 'package:movie_app/utils/app_colors.dart';
-import 'package:movie_app/utils/app_images.dart';
-import 'package:movie_app/utils/size_utils.dart';
+import 'package:movie_application/core/utils/app_colors.dart';
+import 'package:movie_application/core/utils/app_images.dart';
+import 'package:movie_application/core/utils/size_utils.dart';
+import 'package:movie_application/core/widgets/custom_elevated_button.dart';
+import 'package:movie_application/core/widgets/custom_text_form_field.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -58,7 +58,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
               // el soura el kebeera
               Image.asset(
-                AppImages.forgetPasswordImagePath,
+                AppImages.forgetPassImagePath,
                 width: double.infinity,
                 height: h(400),
                 fit: BoxFit.contain,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/ui/widgets/custom_elevated_button.dart';
-import 'package:movie_app/ui/widgets/custom_text_form_field.dart';
-import 'package:movie_app/ui/widgets/language_switch.dart';
-import 'package:movie_app/utils/app_colors.dart';
-import 'package:movie_app/utils/app_images.dart';
-import 'package:movie_app/utils/app_routes.dart';
-import 'package:movie_app/utils/size_utils.dart';
+import 'package:movie_application/core/utils/app_colors.dart';
+import 'package:movie_application/core/utils/app_images.dart';
+import 'package:movie_application/core/utils/app_routes.dart';
+import 'package:movie_application/core/utils/size_utils.dart';
+import 'package:movie_application/core/widgets/custom_elevated_button.dart';
+import 'package:movie_application/core/widgets/custom_text_form_field.dart';
+import 'package:movie_application/core/widgets/language_switch.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -27,9 +27,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isConfirmPasswordHidden = true;
 
   List<String> avatars = [
-    AppImages.avatar1ImagePath,
-    AppImages.avatar2ImagePath,
-    AppImages.avatar3ImagePath,
+    AppImages.profileAvatar1ImagePath,
+    AppImages.profileAvatar2ImagePath,
+    AppImages.profileAvatar3ImagePath,
   ];
   int selectedAvatar = 1;
 

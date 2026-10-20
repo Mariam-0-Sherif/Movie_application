@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/ui/widgets/custom_elevated_button.dart';
-import 'package:movie_app/ui/widgets/custom_text_form_field.dart';
-import 'package:movie_app/ui/widgets/divider_item.dart';
-import 'package:movie_app/ui/widgets/language_switch.dart';
-import 'package:movie_app/utils/app_colors.dart';
-import 'package:movie_app/utils/app_images.dart';
-import 'package:movie_app/utils/app_routes.dart';
-import 'package:movie_app/utils/size_utils.dart';
+import 'package:movie_application/core/utils/app_colors.dart';
+import 'package:movie_application/core/utils/app_images.dart';
+import 'package:movie_application/core/utils/app_routes.dart';
+import 'package:movie_application/core/utils/size_utils.dart';
+import 'package:movie_application/core/widgets/custom_elevated_button.dart';
+import 'package:movie_application/core/widgets/custom_text_form_field.dart';
+import 'package:movie_application/core/widgets/divider_item.dart';
+import 'package:movie_application/core/widgets/language_switch.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 SizedBox(height: h(60)),
-                Image.asset(AppImages.logoImagePath, width: w(120)),
+                Image.asset(AppImages.logoAppImagePath, width: w(120)),
                 SizedBox(height: h(60)),
                 CustomTextFormField(
                   controller: emailController,
@@ -216,7 +216,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(AppImages.googleImagePath, width: w(24)),
+                        Image.asset(
+                          AppImages.googleIconImagePath,
+                          width: w(24),
+                        ),
                         SizedBox(width: w(12)),
                         Text(
                           'Login With Google',
