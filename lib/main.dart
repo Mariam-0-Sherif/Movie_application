@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_application/features/ui/auth/forget_password/forget_password_screen.dart';
 import 'package:movie_application/features/ui/auth/login/login_screen.dart';
@@ -6,8 +7,13 @@ import 'package:movie_application/features/ui/auth/register/register_screen.dart
 import 'core/utils/app_routes.dart';
 import 'core/utils/app_theme.dart';
 import 'features/ui/onboarding/onboarding_screen.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
