@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:movie_application/core/utils/app_styles.dart';
-import 'package:movie_application/core/utils/validators.dart';
-import 'package:movie_application/features/ui/auth/login/widget/divider_or_divider.dart';
-import 'package:movie_application/features/ui/auth/widget/bottom_sheet.dart';
-import 'package:movie_application/features/ui/auth/widget/build.dart';
-
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_images.dart';
-import '../../../../core/utils/app_routes.dart';
-import '../../../../core/utils/size_utils.dart';
-import '../../../../core/widgets/custom_image_asset.dart';
+import 'package:movie_application/core/utils/app_colors.dart';
+import 'package:movie_application/core/utils/app_images.dart';
+import 'package:movie_application/core/utils/app_routes.dart';
+import 'package:movie_application/core/utils/size_utils.dart';
+import 'package:movie_application/core/widgets/custom_elevated_button.dart';
+import 'package:movie_application/core/widgets/custom_text_form_field.dart';
+import 'package:movie_application/core/widgets/divider_item.dart';
+import 'package:movie_application/core/widgets/language_switch.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,7 +20,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   bool isPasswordHidden = true;
+
+  double w(double value) => SizeUtils.getWidth(context, value);
+
+  double h(double value) => SizeUtils.getHeight(context, value);
+
+  void login() {
+    if (formKey.currentState!.validate()) {
+      Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
+    }
+  }
 
   @override
   void dispose() {
@@ -37,35 +45,62 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: SizeUtils.getWidth(context, 19),
-          ),
+          padding: EdgeInsets.symmetric(horizontal: w(16)),
           child: Form(
             key: formKey,
             child: Column(
-              spacing: SizeUtils.getHeight(context, 17),
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: SizeUtils.getHeight(context, 40)),
-                CustomImageAsset(
-                  path: AppImages.logoAppImagePath,
-                  height: SizeUtils.getHeight(context, 100),
-                ),
-                SizedBox(height: SizeUtils.getHeight(context, 40)),
-                buildField(
-                  prefixIcon: CustomImageAsset(
-                    path: AppImages.emailIconImagePath,
-                  ),
+                SizedBox(height: h(60)),
+                Image.asset(AppImages.logoAppImagePath, width: w(120)),
+                SizedBox(height: h(60)),
+                CustomTextFormField(
                   controller: emailController,
-                  hint: 'Email',
-                  validator: (p0) => Validators.validateEmail(p0),
+                  keyboardType: TextInputType.emailAddress,
+                  filled: true,
+                  fillColor: AppColors.darkGreyColor,
+                  borderSideColor: AppColors.darkGreyColor,
+                  style: TextStyle(
+                    color: AppColors.whiteColor,
+                    fontSize: w(16),
+                  ),
+                  hintText: 'Email',
+                  hintStyle: TextStyle(
+                    color: AppColors.whiteColor,
+                    fontSize: w(16),
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.email,
+                    color: AppColors.whiteColor,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!value.contains('@')) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
                 ),
-                buildField(
+                SizedBox(height: h(24)),
+                CustomTextFormField(
                   controller: passwordController,
                   obscureText: isPasswordHidden,
-                  hint: 'Password',
-                  prefixIcon: CustomImageAsset(
-                    path: AppImages.passwordIconImagePath,
+                  filled: true,
+                  fillColor: AppColors.darkGreyColor,
+                  borderSideColor: AppColors.darkGreyColor,
+                  style: TextStyle(
+                    color: AppColors.whiteColor,
+                    fontSize: w(16),
+                  ),
+                  hintText: 'Password',
+                  hintStyle: TextStyle(
+                    color: AppColors.whiteColor,
+                    fontSize: w(16),
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.lock,
+                    color: AppColors.whiteColor,
                   ),
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -79,7 +114,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: AppColors.whiteColor,
                     ),
                   ),
-                  validator: (p0) => Validators.validatePassword(p0),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
                 ),
                 Align(
                   alignment: Alignment.centerRight,
@@ -92,21 +135,40 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: Text(
                       'Forget Password ?',
-                      style: AppStyles.regular14YellowRoboto,
+                      style: TextStyle(
+                        color: AppColors.yellowColor,
+                        fontSize: w(14),
+                      ),
                     ),
                   ),
                 ),
-                buildElevatedButton(
-                  onPressed: login,
-                  child: Text('Login', style: AppStyles.regular20BlackRoboto),
-                  context: context,
+                SizedBox(height: h(16)),
+                SizedBox(
+                  width: double.infinity,
+                  height: h(56),
+                  child: CustomElevatedButton(
+                    onPressed: login,
+                    backgroundColor: AppColors.yellowColor,
+                    radius: w(16),
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        color: AppColors.blackColor,
+                        fontSize: w(20),
+                      ),
+                    ),
+                  ),
                 ),
+                SizedBox(height: h(24)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Don't Have Account ?",
-                      style: AppStyles.regular14WhiteRoboto,
+                      style: TextStyle(
+                        color: AppColors.whiteColor,
+                        fontSize: w(14),
+                      ),
                     ),
                     TextButton(
                       onPressed: () {
@@ -117,46 +179,67 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: Text(
                         'Create One',
-                        style: AppStyles.black14YellowRoboto,
+                        style: TextStyle(
+                          color: AppColors.yellowColor,
+                          fontSize: w(14),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                DividerOrDivider(),
-                buildElevatedButton(
-                  onPressed: () {
-                    /// todo: Login With Google
-                  },
-                  child: Row(
-                    spacing: SizeUtils.getWidth(context, 24),
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(AppImages.googleIconImagePath),
-                      Text(
-                        'Login With Google',
-                        style: AppStyles.regular16BlackRoboto,
+                SizedBox(height: h(16)),
+                Row(
+                  children: [
+                    DividerItem(color: AppColors.yellowColor, indent: w(40)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: w(12)),
+                      child: Text(
+                        'OR',
+                        style: TextStyle(
+                          color: AppColors.yellowColor,
+                          fontSize: w(16),
+                        ),
                       ),
-                    ],
+                    ),
+                    DividerItem(color: AppColors.yellowColor, endIndent: w(40)),
+                  ],
+                ),
+                SizedBox(height: h(24)),
+                SizedBox(
+                  width: double.infinity,
+                  height: h(56),
+                  child: CustomElevatedButton(
+                    onPressed: () {},
+                    backgroundColor: AppColors.yellowColor,
+                    radius: w(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          AppImages.googleIconImagePath,
+                          width: w(24),
+                        ),
+                        SizedBox(width: w(12)),
+                        Text(
+                          'Login With Google',
+                          style: TextStyle(
+                            color: AppColors.blackColor,
+                            fontSize: w(20),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  context: context,
                 ),
-                CustomImageAsset(
-                  path: AppImages.languageSwitchIconImagePath,
-                  onTap: () {
-                    showLanguageSheet(context);
-                  },
-                ),
+                SizedBox(height: h(24)),
+                const LanguageSwitch(),
+                SizedBox(height: h(24)),
               ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  void login() {
-    if (formKey.currentState!.validate()) {
-      Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
-    }
   }
 }

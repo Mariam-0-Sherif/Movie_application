@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_images.dart';
-import 'package:movie_application/core/utils/app_styles.dart';
-import 'package:movie_application/core/utils/validators.dart';
-import 'package:movie_application/core/widgets/custom_image_asset.dart';
-import 'package:movie_application/features/ui/auth/register/widget/choose_avatar.dart';
-
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_routes.dart';
-import '../../../../core/utils/size_utils.dart';
-import '../widget/bottom_sheet.dart';
-import '../widget/build.dart';
+import 'package:movie_application/core/utils/app_routes.dart';
+import 'package:movie_application/core/utils/size_utils.dart';
+import 'package:movie_application/core/widgets/custom_elevated_button.dart';
+import 'package:movie_application/core/widgets/custom_text_form_field.dart';
+import 'package:movie_application/core/widgets/language_switch.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,23 +16,32 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+
   bool isPasswordHidden = true;
   bool isConfirmPasswordHidden = true;
-  int selectedAvatar = 1;
-  late final PageController avatarController = PageController(
-    viewportFraction: 0.36,
-    initialPage: selectedAvatar,
-  );
+
   List<String> avatars = [
     AppImages.profileAvatar1ImagePath,
     AppImages.profileAvatar2ImagePath,
     AppImages.profileAvatar3ImagePath,
   ];
+  int selectedAvatar = 1;
+
+  double w(double value) => SizeUtils.getWidth(context, value);
+
+  double h(double value) => SizeUtils.getHeight(context, value);
+
+  void createAccount() {
+    if (formKey.currentState!.validate()) {
+      Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
+    }
+  }
 
   @override
   void dispose() {
@@ -45,8 +50,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     passwordController.dispose();
     confirmPasswordController.dispose();
     phoneController.dispose();
-    avatarController.dispose();
     super.dispose();
+  }
+
+  Widget buildField({
+    required String hint,
+    required IconData icon,
+    required TextEditingController controller,
+    required String? Function(String?) validator,
+    TextInputType type = TextInputType.text,
+  }) {
+    return CustomTextFormField(
+      controller: controller,
+      keyboardType: type,
+      filled: true,
+      fillColor: AppColors.darkGreyColor,
+      borderSideColor: AppColors.darkGreyColor,
+      style: TextStyle(color: AppColors.whiteColor, fontSize: w(16)),
+      hintText: hint,
+      hintStyle: TextStyle(color: AppColors.whiteColor, fontSize: w(16)),
+      prefixIcon: Icon(icon, color: AppColors.whiteColor),
+      validator: validator,
+    );
   }
 
   @override
@@ -57,50 +82,86 @@ class _RegisterScreenState extends State<RegisterScreen> {
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back, color: AppColors.yellowColor),
         ),
-        title: Text('Register', style: AppStyles.regular16YellowRoboto),
+        title: Text(
+          'Register',
+          style: TextStyle(color: AppColors.yellowColor, fontSize: w(16)),
+        ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          horizontal: SizeUtils.getWidth(context, 16),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: w(16)),
         child: Form(
           key: formKey,
           child: Column(
-            spacing: SizeUtils.getHeight(context, 13),
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ChooseAvatar(
-                avatars: avatars,
-                avatarController: avatarController,
-                onAvatarChanged: (index) => selectedAvatar = index,
+              SizedBox(height: h(16)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  for (int i = 0; i < avatars.length; i++)
+                    GestureDetector(
+                      onTap: () {
+                        selectedAvatar = i;
+                        setState(() {});
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: w(6)),
+                        child: Image.asset(
+                          avatars[i],
+                          width: i == selectedAvatar ? w(158) : w(90),
+                          height: i == selectedAvatar ? w(158) : w(90),
+                        ),
+                      ),
+                    ),
+                ],
               ),
+              SizedBox(height: h(8)),
               Text(
                 'Avatar',
-                style: AppStyles.regular16WhiteRoboto,
-                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColors.whiteColor, fontSize: w(14)),
               ),
+              SizedBox(height: h(24)),
               buildField(
                 hint: 'Name',
-                prefixIcon: CustomImageAsset(path: AppImages.nameIconImagePath),
+                icon: Icons.person,
                 controller: nameController,
-                validator: (p0) => Validators.validateName(p0),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
               ),
+              SizedBox(height: h(16)),
               buildField(
                 hint: 'Email',
-                prefixIcon: CustomImageAsset(
-                  path: AppImages.emailIconImagePath,
-                ),
+                icon: Icons.email,
                 controller: emailController,
-                validator: (p0) => Validators.validateEmail(p0),
+                type: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
               ),
-              buildField(
-                hint: 'Password',
-                prefixIcon: CustomImageAsset(
-                  path: AppImages.passwordIconImagePath,
-                ),
+              SizedBox(height: h(16)),
+              CustomTextFormField(
                 controller: passwordController,
                 obscureText: isPasswordHidden,
-                validator: (p0) => Validators.validatePassword(p0),
+                filled: true,
+                fillColor: AppColors.darkGreyColor,
+                borderSideColor: AppColors.darkGreyColor,
+                style: TextStyle(color: AppColors.whiteColor, fontSize: w(16)),
+                hintText: 'Password',
+                hintStyle: TextStyle(
+                  color: AppColors.whiteColor,
+                  fontSize: w(16),
+                ),
+                prefixIcon: const Icon(Icons.lock, color: AppColors.whiteColor),
                 suffixIcon: IconButton(
                   onPressed: () {
                     isPasswordHidden = !isPasswordHidden;
@@ -111,18 +172,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: AppColors.whiteColor,
                   ),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
+                  return null;
+                },
               ),
-              buildField(
-                hint: 'Confirm Password',
-                prefixIcon: CustomImageAsset(
-                  path: AppImages.passwordIconImagePath,
-                ),
+              SizedBox(height: h(16)),
+              CustomTextFormField(
                 controller: confirmPasswordController,
                 obscureText: isConfirmPasswordHidden,
-                validator: (p0) => Validators.validateConfirmPassword(
-                  p0,
-                  passwordController.text,
+                filled: true,
+                fillColor: AppColors.darkGreyColor,
+                borderSideColor: AppColors.darkGreyColor,
+                style: TextStyle(color: AppColors.whiteColor, fontSize: w(16)),
+                hintText: 'Confirm Password',
+                hintStyle: TextStyle(
+                  color: AppColors.whiteColor,
+                  fontSize: w(16),
                 ),
+                prefixIcon: const Icon(Icons.lock, color: AppColors.whiteColor),
                 suffixIcon: IconButton(
                   onPressed: () {
                     isConfirmPasswordHidden = !isConfirmPasswordHidden;
@@ -135,53 +208,80 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: AppColors.whiteColor,
                   ),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please confirm your password';
+                  }
+                  if (value != passwordController.text) {
+                    return 'Passwords do not match';
+                  }
+                  return null;
+                },
               ),
+              SizedBox(height: h(16)),
               buildField(
                 hint: 'Phone Number',
-                prefixIcon: CustomImageAsset(
-                  path: AppImages.phoneIconImagePath,
-                ),
+                icon: Icons.phone,
                 controller: phoneController,
-                validator: (p0) => Validators.validatePhoneNumber(p0),
-                keyboardType: TextInputType.phone,
+                type: TextInputType.phone,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your phone number';
+                  }
+                  if (value.length < 11) {
+                    return 'Please enter a valid phone number';
+                  }
+                  return null;
+                },
               ),
-              buildElevatedButton(
-                onPressed: createAccount,
-                context: context,
-                child: Text(
-                  'Create Account',
-                  style: AppStyles.regular20BlackRoboto,
+              SizedBox(height: h(24)),
+              SizedBox(
+                width: double.infinity,
+                height: h(56),
+                child: CustomElevatedButton(
+                  onPressed: createAccount,
+                  backgroundColor: AppColors.yellowColor,
+                  radius: w(16),
+                  child: Text(
+                    'Create Account',
+                    style: TextStyle(
+                      color: AppColors.blackColor,
+                      fontSize: w(20),
+                    ),
+                  ),
                 ),
               ),
+              SizedBox(height: h(16)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Already Have Account ?',
-                    style: AppStyles.regular14WhiteRoboto,
+                    style: TextStyle(
+                      color: AppColors.whiteColor,
+                      fontSize: w(14),
+                    ),
                   ),
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text('Login', style: AppStyles.black14YellowRoboto),
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        color: AppColors.yellowColor,
+                        fontSize: w(14),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),
-              CustomImageAsset(
-                path: AppImages.languageSwitchIconImagePath,
-                onTap: () {
-                  showLanguageSheet(context);
-                },
-              ),
+              SizedBox(height: h(5)),
+              const LanguageSwitch(),
+              SizedBox(height: h(16)),
             ],
           ),
         ),
       ),
     );
-  }
-
-  void createAccount() {
-    if (formKey.currentState!.validate()) {
-      Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
-    }
   }
 }
