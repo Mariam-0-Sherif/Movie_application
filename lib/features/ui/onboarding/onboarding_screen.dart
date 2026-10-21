@@ -119,7 +119,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       );
     }
   }
-
   void back() {
     controller.previousPage(
       duration: const Duration(milliseconds: 300),
