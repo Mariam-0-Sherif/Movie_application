@@ -3,11 +3,10 @@ import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
 import 'package:movie_application/core/widgets/rating_badge.dart';
 
+
 class MoviePosterCard extends StatelessWidget {
   final String imageUrl;
   final double rating;
-
-  /// Width as designed in Figma (based on a 430 wide screen).
   final double width;
   final VoidCallback? onTap;
 
