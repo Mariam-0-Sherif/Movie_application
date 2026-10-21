@@ -66,4 +66,4 @@ class GenreSection extends StatelessWidget {
       ],
     );
   }
-}
+

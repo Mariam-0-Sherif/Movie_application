@@ -60,4 +60,6 @@ class AppImages {
   static const String availableNowImagePath = '${_basePath}Available Now.png';
   static const String watchNowImagePath = '${_basePath}Watch Now.png';
   static const String searchImagePath = '${_basePath}search_image.png';
+  static const String availableNowImagePath = '${_basePath}available_now.png';
+  static const String watchNowImagePath = '${_basePath}watch_now.png';
 }
