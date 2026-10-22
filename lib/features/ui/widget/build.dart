@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_images.dart';
-import '../../../../core/utils/app_styles.dart';
-import '../../../../core/utils/size_utils.dart';
-import '../../../../core/widgets/custom_elevated_button.dart';
-import '../../../../core/widgets/custom_image_asset.dart';
-import '../../../../core/widgets/custom_text_form_field.dart';
+import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/app_images.dart';
+import '../../../core/utils/app_styles.dart';
+import '../../../core/utils/size_utils.dart';
+import '../../../core/widgets/custom_elevated_button.dart';
+import '../../../core/widgets/custom_image_asset.dart';
+import '../../../core/widgets/custom_text_form_field.dart';
 
 Widget buildField({
-  required String hint,
+  String? hint,
   required Widget? prefixIcon,
   Widget? suffixIcon,
   required TextEditingController? controller,
-  required OnValidator validator,
+  OnValidator validator,
   bool? obscureText,
   TextInputType? keyboardType,
 }) {
@@ -38,12 +38,24 @@ Widget buildElevatedButton({
   required VoidCallback? onPressed,
   required Widget? child,
   required BuildContext context,
+  Color? backgroundColor,
 }) {
   return CustomElevatedButton(
     onPressed: onPressed,
-    backgroundColor: AppColors.yellowColor,
+    backgroundColor: backgroundColor ?? AppColors.yellowColor,
     radius: SizeUtils.getWidth(context, 15),
-    padding: EdgeInsets.symmetric(vertical: SizeUtils.getHeight(context, 12)),
+    padding: EdgeInsets.symmetric(vertical: SizeUtils.getHeight(context, 12),
+        horizontal: SizeUtils.getHeight(context, 5)),
     child: child,
+  );
+}
+
+Widget buildGestureDetector({
+  required void Function() onTap,
+  required Widget child,
+}) {
+  return GestureDetector(
+      onTap: onTap,
+      child: child
   );
 }

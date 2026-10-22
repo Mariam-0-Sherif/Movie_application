@@ -8,8 +8,8 @@ import 'package:movie_application/features/ui/auth/register/widget/choose_avatar
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_routes.dart';
 import '../../../../core/utils/size_utils.dart';
+import '../../widget/build.dart';
 import '../widget/bottom_sheet.dart';
-import '../widget/build.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -178,7 +178,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
   void createAccount() {
     if (formKey.currentState!.validate()) {
       Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
