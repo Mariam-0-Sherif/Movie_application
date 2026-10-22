@@ -5,7 +5,6 @@ import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_images.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
 import 'package:movie_application/features/ui/home/widgets/movies_carousel.dart';
-import 'movies_carousel.dart';
 
 class HomeHeader extends StatefulWidget {
   final List<CarouselMovie> movies;

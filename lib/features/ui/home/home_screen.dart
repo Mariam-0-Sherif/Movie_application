@@ -3,11 +3,10 @@ import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_images.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
 import 'package:movie_application/core/widgets/custom_image_asset.dart';
-import 'package:movie_application/features/ui/home/tabs/explore_tab.dart';
-import 'package:movie_application/features/ui/home/tabs/home_tab.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab.dart';
-import 'package:movie_application/features/ui/home/tabs/search_tab.dart';
-
+import 'package:movie_application/features/ui/home/tabs/explore_tab/explore_tab.dart';
+import 'package:movie_application/features/ui/home/tabs/home_tab/home_tab.dart';
+import 'package:movie_application/features/ui/home/tabs/profile_tab/profile_tab.dart';
+import 'package:movie_application/features/ui/home/tabs/search_tab/search_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,21 +16,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // el index bta3 el tab elly mfto7a delwa2ty (0 = home)
   int selectedIndex = 0;
 
-  // function mo5tasara bta5od raqam el Figma w trg3o 3ala 7asab 3ard el screen
-  double w(double value) => SizeUtils.getWidth(context, value);
-
-  // el 4 screens bel tarteeb elly hatzhar fel nav bar
-  List<Widget> tabs = [
-    const HomeTab(),
-    const SearchTab(),
-    const ExploreTab(),
-    const ProfileTab(),
+  final List<Widget> tabs = const [
+    HomeTab(),
+    SearchTab(),
+    ExploreTab(),
+    ProfileTab(),
   ];
 
-  // btrg3 soret el icon bel lon elly ne7tago (abyad lama msh mo5tara, asfar lama mo5tara)
+  double w(double value) => SizeUtils.getWidth(context, value);
+
   Widget buildIcon(String path, Color color) {
     return CustomImageAsset(
       path: path,
@@ -42,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // item wa7ed fel nav bar, 3ashan manekarrarsh el code 4 marat
   BottomNavigationBarItem buildNavItem(String path, String label) {
     return BottomNavigationBarItem(
       icon: buildIcon(path, AppColors.whiteColor),
@@ -54,10 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // el tab elly 3aleha el dor 3ala hasab el index
-      body: tabs[selectedIndex],
-
-      // SafeArea 3ashan el nav bar yeb2a fo2 el gesture bar el ta7t
+      body: IndexedStack(index: selectedIndex, children: tabs),
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: EdgeInsets.fromLTRB(w(9), 0, w(9), w(9)),
@@ -69,14 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               currentIndex: selectedIndex,
               showSelectedLabels: false,
               showUnselectedLabels: false,
-
-              // lama el user ydos 3ala icon bn8ayar el index w el screen btetghayar
-              onTap: (value) {
-                selectedIndex = value;
-                setState(() {});
-              },
-
-              // el 4 icons bel tarteeb, bnnadi 3alehom men AppImages
+              onTap: (value) => setState(() => selectedIndex = value),
               items: [
                 buildNavItem(AppImages.homeLogoImagePath, 'Home'),
                 buildNavItem(AppImages.searchLogoImagePath, 'Search'),
