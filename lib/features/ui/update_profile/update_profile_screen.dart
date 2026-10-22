@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_styles.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
-import 'package:movie_application/core/widgets/custom_elevated_button.dart';
-import 'package:movie_application/core/widgets/custom_text_form_field.dart';
 import 'package:movie_application/features/ui/update_profile/widgets/avatar_picker_sheet.dart';
+
+import '../../../core/utils/app_images.dart';
+import '../../../core/utils/validators.dart';
+import '../../../core/widgets/custom_image_asset.dart';
+import '../widget/build.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -14,8 +17,7 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(
-  );
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController(
     text: 'John Safwat',
   );
@@ -23,29 +25,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     text: '01200000000',
   );
   int _avatarIndex = 0;
-
   @override
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
     super.dispose();
-  }
-
-  double w(double value) => SizeUtils.getWidth(context, value);
-
-  double h(double value) => SizeUtils.getHeight(context, value);
-
-  Future<void> _pickAvatar() async {
-    final int? picked = await AvatarPickerSheet.show(
-      context,
-      selectedIndex: _avatarIndex,
-    );
-    if (picked == null || !mounted) return;
-    setState(() => _avatarIndex = picked);
-  }
-
-  void _updateData() {
-    if (!_formKey.currentState!.validate()) return;
   }
 
   @override
@@ -60,45 +44,48 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: w(16)),
+          padding: EdgeInsets.symmetric(
+              horizontal: SizeUtils.getWidth(context, 16),
+              vertical: SizeUtils.getHeight(context, 33)),
           child: Column(
+            spacing: SizeUtils.getHeight(context, 24),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
                 child: SingleChildScrollView(
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: SizeUtils.getHeight(context, 24),
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(height: h(24)),
-                        Center(child: _buildAvatar()),
-                        SizedBox(height: h(32)),
-                        _buildField(
+                        Center(
+                            child: buildGestureDetector(
+                              onTap: pickAvatar,
+                              child: ClipOval(
+                                child: CustomImageAsset(
+                                  path: AvatarPickerSheet.avatars[_avatarIndex],
+                                  width: SizeUtils.getWidth(context, 150),
+                                  height: SizeUtils.getHeight(context, 150),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            )),
+                        buildField(
+                          prefixIcon: CustomImageAsset(
+                            path: AppImages.profileTabImagePath,
+                          ),
                           controller: _nameController,
-                          icon: Icons.person,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your name';
-                            }
-                            return null;
-                          },
+                          validator: (p0) => Validators.validateName(p0),
                         ),
-                        SizedBox(height: h(16)),
-                        _buildField(
+                        buildField(
                           controller: _phoneController,
-                          icon: Icons.phone,
-                          type: TextInputType.phone,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your phone number';
-                            }
-                            if (value.length < 11) {
-                              return 'Please enter a valid phone number';
-                            }
-                            return null;
-                          },
+                          prefixIcon: CustomImageAsset(
+                            path: AppImages.phoneIconImagePath,
+                          ),
+                          keyboardType: TextInputType.phone,
+                          validator: (p0) => Validators.validatePhoneNumber(p0),
                         ),
-                        SizedBox(height: h(24)),
                         Text(
                           'Reset Password',
                           style: AppStyles.regular16WhiteRoboto,
@@ -108,20 +95,21 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   ),
                 ),
               ),
-              _buildButton(
-                title: 'Delete Account',
-                color: AppColors.redColor,
-                style: AppStyles.regular16WhiteRoboto,
-                onPressed: () {},
+              buildElevatedButton(
+                  onPressed: () {},
+                  context: context,
+                  backgroundColor: AppColors.redColor,
+                  child: Text('Delete Account',
+                    style: AppStyles.regular16WhiteRoboto,
+                  )
               ),
-              SizedBox(height: h(16)),
-              _buildButton(
-                title: 'Update Data',
-                color: AppColors.yellowColor,
+              buildElevatedButton(
+                  onPressed: _updateData,
+                  context: context,
+                  child: Text('Update Data',
                 style: AppStyles.regular16DarkGrayRoboto,
-                onPressed: _updateData,
-              ),
-              SizedBox(height: h(16)),
+                  )
+              )
             ],
           ),
         ),
@@ -129,54 +117,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 
-  Widget _buildAvatar() {
-    final double size = w(150);
-    return GestureDetector(
-      onTap: _pickAvatar,
-      child: ClipOval(
-        child: Image.asset(
-          AvatarPickerSheet.avatars[_avatarIndex],
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-        ),
-      ),
+  Future<void> pickAvatar() async {
+    final int? picked = await AvatarPickerSheet.show(
+      context,
+      selectedIndex: _avatarIndex,
     );
+    if (picked == null || !mounted) return;
+    setState(() => _avatarIndex = picked);
   }
 
-  Widget _buildField({
-    required TextEditingController controller,
-    required IconData icon,
-    required String? Function(String?) validator,
-    TextInputType type = TextInputType.text,
-  }) {
-    return CustomTextFormField(
-      controller: controller,
-      keyboardType: type,
-      filled: true,
-      fillColor: AppColors.darkGreyColor,
-      borderSideColor: AppColors.darkGreyColor,
-      style: AppStyles.regular16WhiteRoboto,
-      prefixIcon: Icon(icon, color: AppColors.whiteColor),
-      validator: validator,
-    );
-  }
-
-  Widget _buildButton({
-    required String title,
-    required Color color,
-    required TextStyle style,
-    required VoidCallback onPressed,
-  }) {
-    return SizedBox(
-      width: double.infinity,
-      height: h(56),
-      child: CustomElevatedButton(
-        onPressed: onPressed,
-        backgroundColor: color,
-        radius: w(16),
-        child: Text(title, style: style),
-      ),
-    );
+  void _updateData() {
+    if (!_formKey.currentState!.validate()) return;
   }
 }

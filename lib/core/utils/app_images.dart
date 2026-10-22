@@ -10,10 +10,9 @@ class AppImages {
   static const String onBoarding5ImagePath = '${_basePath}OnBoarding_5.png';
   static const String onBoarding6ImagePath = '${_basePath}OnBoarding_6.png';
   static const String homeLogoImagePath = '${_basePath}Home_logo.png';
-  static const String searchLogoImagePath = '${_basePath}Search_logo.png';
+  static const String searchIconImagePath = '${_basePath}search_icon.png';
   static const String exploreImagePath = '${_basePath}explore.png';
   static const String profileTabImagePath = '${_basePath}Profile.png';
-
   static const String logoAppImagePath = '${_basePath}logo_app.png';
   static const String googleIconImagePath = '${_basePath}google_icon.png';
   static const String forgetPassImagePath = '${_basePath}Forgot_password.png';
@@ -21,13 +20,11 @@ class AppImages {
       '${_basePath}Language_switch_icon.png';
   static const String usFlagImagePath = '${_basePath}us_flag.png';
   static const String egFlagImagePath = '${_basePath}eg_flag.png';
-
   static const String emailIconImagePath = '${_basePath}email_icon.png';
   static const String nameIconImagePath = '${_basePath}name_icon.png';
   static const String passwordIconImagePath = '${_basePath}pass_icon.png';
   static const String hidePassIconImagePath = '${_basePath}hide_pass_icon.png';
   static const String phoneIconImagePath = '${_basePath}phone_icon.png';
-
   static const String profileAvatar1ImagePath =
       '${_basePath}list_profile_avatar1.png';
   static const String profileAvatar2ImagePath =

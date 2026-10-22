@@ -25,35 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
     ProfileTab(),
   ];
 
-  double w(double value) => SizeUtils.getWidth(context, value);
-
-  Widget buildIcon(String path, Color color) {
-    return CustomImageAsset(
-      path: path,
-      color: color,
-      width: w(26),
-      height: w(26),
-      fit: BoxFit.contain,
-    );
-  }
-
-  BottomNavigationBarItem buildNavItem(String path, String label) {
-    return BottomNavigationBarItem(
-      icon: buildIcon(path, AppColors.whiteColor),
-      activeIcon: buildIcon(path, AppColors.yellowColor),
-      label: label,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(index: selectedIndex, children: tabs),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(w(9), 0, w(9), w(9)),
+          padding: EdgeInsetsGeometry.symmetric(
+              horizontal: SizeUtils.getWidth(context, 9),
+              vertical: SizeUtils.getHeight(context, 9)
+          ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(w(16)),
+            borderRadius: BorderRadius.circular(16),
             child: BottomNavigationBar(
               backgroundColor: AppColors.darkGreyColor,
               type: BottomNavigationBarType.fixed,
@@ -63,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: (value) => setState(() => selectedIndex = value),
               items: [
                 buildNavItem(AppImages.homeLogoImagePath, 'Home'),
-                buildNavItem(AppImages.searchLogoImagePath, 'Search'),
+                buildNavItem(AppImages.searchIconImagePath, 'Search'),
                 buildNavItem(AppImages.exploreImagePath, 'Explore'),
                 buildNavItem(AppImages.profileTabImagePath, 'Profile'),
               ],
@@ -71,6 +54,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildIcon(String path, Color color) {
+    return CustomImageAsset(
+      path: path,
+      color: color,
+      width: SizeUtils.getWidth(context, 26),
+      height: SizeUtils.getHeight(context, 20),
+      fit: BoxFit.contain,
+    );
+  }
+
+  BottomNavigationBarItem buildNavItem(String path, String label) {
+    return BottomNavigationBarItem(
+      icon: buildIcon(path, AppColors.whiteColor),
+      activeIcon: buildIcon(path, AppColors.yellowColor),
+      label: label,
     );
   }
 }

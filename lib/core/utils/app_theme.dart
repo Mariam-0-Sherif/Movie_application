@@ -14,5 +14,8 @@ class AppTheme {
       backgroundColor: AppColors.transparentColor,
       centerTitle: true,
     ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: AppColors.transparentColor
+      )
   );
 }

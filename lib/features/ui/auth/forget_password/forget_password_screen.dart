@@ -5,9 +5,8 @@ import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_styles.dart';
 import '../../../../core/utils/size_utils.dart';
 import '../../../../core/utils/validators.dart';
-import '../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../core/widgets/custom_image_asset.dart';
-import '../../../../core/widgets/custom_text_form_field.dart';
+import '../../widget/build.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -47,28 +46,18 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(AppImages.forgetPassImagePath),
-              CustomTextFormField(
+              buildField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
-                filled: true,
-                fillColor: AppColors.darkGreyColor,
-                borderSideColor: AppColors.darkGreyColor,
-                cursorColor: AppColors.whiteColor,
-                style: AppStyles.regular16WhiteRoboto,
-                hintText: 'Email',
-                hintStyle: AppStyles.regular16WhiteRoboto,
+                hint: 'Email',
                 prefixIcon: CustomImageAsset(
                   path: AppImages.emailIconImagePath,
                 ),
                 validator: (p0) => Validators.validateEmail(p0),
               ),
-              CustomElevatedButton(
+              buildElevatedButton(
                 onPressed: () {},
-                backgroundColor: AppColors.yellowColor,
-                radius: SizeUtils.getWidth(context, 15),
-                padding: EdgeInsets.symmetric(
-                  vertical: SizeUtils.getHeight(context, 12),
-                ),
+                context: context,
                 child: Text(
                   'Verify Email',
                   style: AppStyles.regular20BlackRoboto,

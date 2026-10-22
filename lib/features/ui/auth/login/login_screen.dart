@@ -3,7 +3,7 @@ import 'package:movie_application/core/utils/app_styles.dart';
 import 'package:movie_application/core/utils/validators.dart';
 import 'package:movie_application/features/ui/auth/login/widget/divider_or_divider.dart';
 import 'package:movie_application/features/ui/auth/widget/bottom_sheet.dart';
-import 'package:movie_application/features/ui/auth/widget/build.dart';
+import 'package:movie_application/features/ui/widget/build.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_images.dart';
@@ -153,7 +153,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
   void login() {
     if (formKey.currentState!.validate()) {
       Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
