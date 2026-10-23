@@ -3,15 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_application/api/model/movies/movies.dart';
 import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
-import 'package:movie_application/core/widgets/movie_poster_card.dart';
+import 'package:movie_application/features/common/utils/main_error_widget.dart';
+import 'package:movie_application/features/common/utils/main_loading_widget.dart';
+import 'package:movie_application/features/common/widget/movie_poster_card.dart';
 import 'package:movie_application/features/ui/home/widgets/genre_section.dart';
 import 'package:movie_application/features/ui/home/widgets/home_header.dart';
 import 'package:movie_application/features/ui/home/widgets/movies_carousel.dart';
-import 'package:movie_application/features/ui/widget/main_error_widget.dart';
-import 'package:movie_application/features/ui/widget/main_loading_widget.dart';
 
-import '../../bloc/home_bloc.dart';
-import '../../bloc/home_state.dart';
+import '../../cubit/home_bloc.dart';
+import '../../cubit/home_state.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});

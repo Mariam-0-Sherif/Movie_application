@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,13 +5,14 @@ import 'package:movie_application/core/utils/app_styles.dart';
 import 'package:movie_application/core/utils/validators.dart';
 import 'package:movie_application/features/ui/auth/login/widget/divider_or_divider.dart';
 import 'package:movie_application/features/ui/auth/widget/bottom_sheet.dart';
-import 'package:movie_application/features/ui/widget/build.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_routes.dart';
 import '../../../../core/utils/size_utils.dart';
-import '../../../../core/widgets/custom_image_asset.dart';
+import '../../../common/widget/app_button.dart';
+import '../../../common/widget/app_text_field.dart';
+import '../../../common/widget/custom_image_asset.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: SizeUtils.getHeight(context, 40),
                 ),
-                buildField(
+                AppTextField(
                   prefixIcon: CustomImageAsset(
                     path: AppImages.emailIconImagePath,
                   ),
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (value) =>
                       Validators.validateEmail(value),
                 ),
-                buildField(
+                AppTextField(
                   controller: passwordController,
                   obscureText: isPasswordHidden,
                   hint: 'Password',
@@ -121,13 +121,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                buildElevatedButton(
+                AppButton(
                   onPressed: login,
                   child: Text(
                     'Login',
                     style: AppStyles.regular20BlackRoboto,
                   ),
-                  context: context,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -151,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 DividerOrDivider(),
-                buildElevatedButton(
+                AppButton(
                   onPressed: isGoogleLoading
                       ? null
                       : signInWithGoogle,
@@ -177,7 +176,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  context: context,
                 ),
                 CustomImageAsset(
                   path: AppImages.languageSwitchIconImagePath,
@@ -193,32 +191,32 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void login() {
-    if (formKey.currentState!.validate()) {
+  Future<void> login() async {
+    if (!formKey.currentState!.validate()) return;
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text,
+      );
+      if (!mounted) return;
       Navigator.pushNamedAndRemoveUntil(
         context,
         AppRoutes.homeRouteName,
             (route) => false,
       );
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message ?? 'Login failed')),
+      );
     }
   }
 
   Future<void> signInWithGoogle() async {
-    if (!mounted) return;
+    if (!mounted || isGoogleLoading) return;
 
-    debugPrint('GOOGLE LOGIN SUCCESS');
-    debugPrint('HOME ROUTE: ${AppRoutes.homeRouteName}');
-
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      AppRoutes.homeRouteName,
-          (route) => false,
-    );
-    if (isGoogleLoading) return;
-
-    setState(() {
-      isGoogleLoading = true;
-    });
+    setState(() => isGoogleLoading = true);
 
     try {
       await _googleSignInInit;
@@ -226,18 +224,14 @@ class _LoginScreenState extends State<LoginScreen> {
       final GoogleSignInAccount googleUser =
       await GoogleSignIn.instance.authenticate();
 
-      final GoogleSignInAuthentication googleAuth =
-          googleUser.authentication;
+      final googleAuth = googleUser.authentication;
 
-      final AuthCredential credential =
-      GoogleAuthProvider.credential(
+      final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential userCredential =
-      await FirebaseAuth.instance.signInWithCredential(
-        credential,
-      );
+      final userCredential =
+      await FirebaseAuth.instance.signInWithCredential(credential);
 
       if (!mounted) return;
 
@@ -265,9 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } finally {
       if (mounted) {
-        setState(() {
-          isGoogleLoading = false;
-        });
+        setState(() => isGoogleLoading = false);
       }
     }
   }

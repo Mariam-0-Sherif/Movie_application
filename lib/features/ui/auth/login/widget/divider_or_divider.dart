@@ -3,7 +3,7 @@ import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_styles.dart';
 
 import '../../../../../core/utils/size_utils.dart';
-import '../../../../../core/widgets/divider_item.dart';
+import '../../../../common/widget/divider_item.dart';
 
 class DividerOrDivider extends StatelessWidget {
   const DividerOrDivider({super.key});

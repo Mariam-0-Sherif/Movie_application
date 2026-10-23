@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_images.dart';
-import 'package:movie_application/core/widgets/custom_image_asset.dart';
+import 'package:movie_application/features/common/widget/custom_image_asset.dart';
 
-import '../../../widget/build.dart';
+import '../../../../common/widget/app_text_field.dart';
 
 class SearchTab extends StatelessWidget {
   const SearchTab({super.key});
@@ -12,7 +12,7 @@ class SearchTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: buildField(
+        title: AppTextField(
           prefixIcon: CustomImageAsset(path: AppImages.searchIconImagePath),
           controller: null,
           hint: 'Search',

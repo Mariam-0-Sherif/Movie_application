@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/utils/size_utils.dart';
-import '../../../widget/build.dart';
 
 class ChooseAvatar extends StatefulWidget {
   final PageController avatarController;
@@ -37,7 +35,7 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
           });
         },
         itemBuilder: (context, i) {
-          return buildGestureDetector(
+          return GestureDetector(
             onTap: () => widget.avatarController.animateToPage(
               i,
               duration: const Duration(milliseconds: 300),
