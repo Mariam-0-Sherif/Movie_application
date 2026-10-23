@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_application/core/utils/app_images.dart';
 import 'package:movie_application/core/utils/app_styles.dart';
 import 'package:movie_application/core/utils/validators.dart';
-import 'package:movie_application/core/widgets/custom_image_asset.dart';
+import 'package:movie_application/features/common/widget/custom_image_asset.dart';
 import 'package:movie_application/features/ui/auth/register/widget/choose_avatar.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_routes.dart';
 import '../../../../core/utils/size_utils.dart';
-import '../../widget/build.dart';
+import '../../../common/widget/app_button.dart';
+import '../../../common/widget/app_text_field.dart';
 import '../widget/bottom_sheet.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -79,13 +82,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 style: AppStyles.regular16WhiteRoboto,
                 textAlign: TextAlign.center,
               ),
-              buildField(
+              AppTextField(
                 hint: 'Name',
                 prefixIcon: CustomImageAsset(path: AppImages.nameIconImagePath),
                 controller: nameController,
                 validator: (p0) => Validators.validateName(p0),
               ),
-              buildField(
+              AppTextField(
                 hint: 'Email',
                 prefixIcon: CustomImageAsset(
                   path: AppImages.emailIconImagePath,
@@ -93,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: emailController,
                 validator: (p0) => Validators.validateEmail(p0),
               ),
-              buildField(
+              AppTextField(
                 hint: 'Password',
                 prefixIcon: CustomImageAsset(
                   path: AppImages.passwordIconImagePath,
@@ -112,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              buildField(
+              AppTextField(
                 hint: 'Confirm Password',
                 prefixIcon: CustomImageAsset(
                   path: AppImages.passwordIconImagePath,
@@ -136,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              buildField(
+              AppTextField(
                 hint: 'Phone Number',
                 prefixIcon: CustomImageAsset(
                   path: AppImages.phoneIconImagePath,
@@ -145,9 +148,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 validator: (p0) => Validators.validatePhoneNumber(p0),
                 keyboardType: TextInputType.phone,
               ),
-              buildElevatedButton(
+              AppButton(
                 onPressed: createAccount,
-                context: context,
                 child: Text(
                   'Create Account',
                   style: AppStyles.regular20BlackRoboto,
@@ -178,9 +180,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-  void createAccount() {
-    if (formKey.currentState!.validate()) {
-      Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
+
+  Future<void> createAccount() async {
+    if (!formKey.currentState!.validate()) return;
+
+    try {
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text,
+          );
+      final user = credential.user!;
+      await user.updateDisplayName(nameController.text.trim());
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'name': nameController.text.trim(),
+        'email': emailController.text.trim(),
+        'phone': phoneController.text.trim(),
+        'avatar': selectedAvatar,
+      });
+      if (!mounted) return;
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.homeRouteName,
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      debugPrint('REGISTER ERROR: ${e.code} - ${e.message}');
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message ?? 'Register failed')));
+    } on FirebaseException catch (e) {
+      debugPrint('FIRESTORE ERROR: ${e.code} - ${e.message}');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Saving data failed: ${e.message}')),
+      );
     }
   }
 }

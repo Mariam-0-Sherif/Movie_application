@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
-import 'package:movie_application/core/widgets/rating_badge.dart';
-
+import 'package:movie_application/features/common/widget/rating_badge.dart';
 
 class MoviePosterCard extends StatelessWidget {
   final String imageUrl;

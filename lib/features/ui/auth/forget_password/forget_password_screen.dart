@@ -5,8 +5,9 @@ import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_styles.dart';
 import '../../../../core/utils/size_utils.dart';
 import '../../../../core/utils/validators.dart';
-import '../../../../core/widgets/custom_image_asset.dart';
-import '../../widget/build.dart';
+import '../../../common/widget/app_button.dart';
+import '../../../common/widget/app_text_field.dart';
+import '../../../common/widget/custom_image_asset.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -46,7 +47,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(AppImages.forgetPassImagePath),
-              buildField(
+              AppTextField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 hint: 'Email',
@@ -55,9 +56,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 ),
                 validator: (p0) => Validators.validateEmail(p0),
               ),
-              buildElevatedButton(
+              AppButton(
                 onPressed: () {},
-                context: context,
                 child: Text(
                   'Verify Email',
                   style: AppStyles.regular20BlackRoboto,

@@ -4,7 +4,7 @@ import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_routes.dart';
 import '../../../core/utils/app_styles.dart';
 import '../../../core/utils/size_utils.dart';
-import '../../../core/widgets/custom_elevated_button.dart';
+import '../../common/widget/custom_elevated_button.dart';
 import 'model/onboarding_model.dart';
 
 class OnboardingScreen extends StatefulWidget {

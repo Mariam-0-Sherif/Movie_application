@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
-import 'package:movie_application/core/widgets/movie_poster_card.dart';
+import 'package:movie_application/features/common/widget/movie_poster_card.dart';
 
 /// The minimum data the carousel needs to draw one poster.
 typedef CarouselMovie = ({String imageUrl, double rating});

@@ -6,8 +6,9 @@ import 'package:movie_application/features/ui/update_profile/widgets/avatar_pick
 
 import '../../../core/utils/app_images.dart';
 import '../../../core/utils/validators.dart';
-import '../../../core/widgets/custom_image_asset.dart';
-import '../widget/build.dart';
+import '../../common/widget/app_button.dart';
+import '../../common/widget/app_text_field.dart';
+import '../../common/widget/custom_image_asset.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -60,7 +61,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Center(
-                            child: buildGestureDetector(
+                            child: GestureDetector(
                               onTap: pickAvatar,
                               child: ClipOval(
                                 child: CustomImageAsset(
@@ -71,14 +72,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 ),
                               ),
                             )),
-                        buildField(
+                        AppTextField(
                           prefixIcon: CustomImageAsset(
                             path: AppImages.profileTabImagePath,
                           ),
                           controller: _nameController,
                           validator: (p0) => Validators.validateName(p0),
                         ),
-                        buildField(
+                        AppTextField(
                           controller: _phoneController,
                           prefixIcon: CustomImageAsset(
                             path: AppImages.phoneIconImagePath,
@@ -95,17 +96,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   ),
                 ),
               ),
-              buildElevatedButton(
+              AppButton(
                   onPressed: () {},
-                  context: context,
                   backgroundColor: AppColors.redColor,
                   child: Text('Delete Account',
                     style: AppStyles.regular16WhiteRoboto,
                   )
               ),
-              buildElevatedButton(
+              AppButton(
                   onPressed: _updateData,
-                  context: context,
                   child: Text('Update Data',
                 style: AppStyles.regular16DarkGrayRoboto,
                   )
