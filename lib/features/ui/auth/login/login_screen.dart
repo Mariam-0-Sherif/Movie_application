@@ -31,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isPasswordHidden = true;
   bool isGoogleLoading = false;
+  static const String _webClientId = '41192507518-i7umub7csd3hosh2p6atnn2ff887li3r.apps.googleusercontent.com';
 
   late final Future<void> _googleSignInInit;
 
@@ -39,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
 
     _googleSignInInit = GoogleSignIn.instance.initialize(
-      serverClientId: 'YOUR_WEB_OAUTH_CLIENT_ID',
+      serverClientId: _webClientId,
     );
   }
 

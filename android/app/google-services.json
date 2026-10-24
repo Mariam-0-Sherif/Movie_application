@@ -12,7 +12,12 @@
           "package_name": "com.example.movie_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "41192507518-i7umub7csd3hosh2p6atnn2ff887li3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC5ZNkRcsENFo8R7Y3itEJ6BwWNEyYNqfs"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41192507518-i7umub7csd3hosh2p6atnn2ff887li3r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "41192507518-9qkddtism1loohebq54esui9nlf6hd30.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.movies"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +48,12 @@
           "package_name": "com.example.movie_application"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "41192507518-i7umub7csd3hosh2p6atnn2ff887li3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC5ZNkRcsENFo8R7Y3itEJ6BwWNEyYNqfs"
@@ -39,7 +61,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41192507518-i7umub7csd3hosh2p6atnn2ff887li3r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "41192507518-9qkddtism1loohebq54esui9nlf6hd30.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.movies"
+              }
+            }
+          ]
         }
       }
     },
@@ -50,7 +84,12 @@
           "package_name": "com.example.movies"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "41192507518-i7umub7csd3hosh2p6atnn2ff887li3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC5ZNkRcsENFo8R7Y3itEJ6BwWNEyYNqfs"
@@ -58,7 +97,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41192507518-i7umub7csd3hosh2p6atnn2ff887li3r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "41192507518-9qkddtism1loohebq54esui9nlf6hd30.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.movies"
+              }
+            }
+          ]
         }
       }
     }
