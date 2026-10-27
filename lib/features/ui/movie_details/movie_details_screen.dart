@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_application/api/model/movie_details/movie.dart';
+import 'package:movie_application/api/model/movie_suggestions/suggestion_movie.dart';
 import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_styles.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
+import 'package:movie_application/features/common/utils/main_error_widget.dart';
+import 'package:movie_application/features/common/utils/main_loading_widget.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/cast_section.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/details_header.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/genres_section.dart';
@@ -10,102 +15,171 @@ import 'package:movie_application/features/ui/movie_details/widgets/screenshots_
 import 'package:movie_application/features/ui/movie_details/widgets/similar_section.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/summary_section.dart';
 
-import '../../common/widget/custom_elevated_button.dart';
+import '../../common/widget/app_button.dart';
+import 'cubit/movie_details_cubit.dart';
+import 'cubit/movie_details_state.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
-  const MovieDetailsScreen({super.key});
+  final int movieId;
 
-  // Placeholder values until the details cubit is connected.
-  static const String _posterUrl = 'https://picsum.photos/seed/poster/600/900';
-  static const List<String> _screenshots = [
-    'https://picsum.photos/seed/shot1/800/450',
-    'https://picsum.photos/seed/shot2/800/450',
-    'https://picsum.photos/seed/shot3/800/450',
-  ];
-  static const List<SimilarMovie> _similar = [
-    (imageUrl: 'https://picsum.photos/seed/sim1/300/450', rating: 7.7),
-    (imageUrl: 'https://picsum.photos/seed/sim2/300/450', rating: 7.7),
-    (imageUrl: 'https://picsum.photos/seed/sim3/300/450', rating: 7.7),
-    (imageUrl: 'https://picsum.photos/seed/sim4/300/450', rating: 7.7),
-  ];
-  static const String _summary =
-      'The movie summary will be shown here once the details are loaded '
-      'from the API. It can be a few lines long and the text wraps on '
-      'its own.';
-  static const List<CastMember> _cast = [
-    (
-    name: 'Actor One',
-    character: 'Character One',
-    imageUrl: 'https://picsum.photos/seed/cast1/200/200',
-    ),
-    (
-    name: 'Actor Two',
-    character: 'Character Two',
-    imageUrl: 'https://picsum.photos/seed/cast2/200/200',
-    ),
-    (
-    name: 'Actor Three',
-    character: 'Character Three',
-    imageUrl: 'https://picsum.photos/seed/cast3/200/200',
-    ),
-  ];
-  static const List<String> _genres = [
-    'Action',
-    'Sci-Fi',
-    'Adventure',
-    'Fantasy',
-    'Horror',
-  ];
+  const MovieDetailsScreen({super.key, required this.movieId});
 
   @override
   Widget build(BuildContext context) {
-    final sectionGap = SizedBox(height: SizeUtils.getHeight(context, 24));
+    return BlocProvider(
+      create: (_) =>
+      MovieDetailsCubit()
+        ..loadMovie(movieId),
+      child: _DetailsContent(movieId: movieId),
+    );
+  }
+}
 
+class _DetailsContent extends StatelessWidget {
+  final int movieId;
+
+  const _DetailsContent({required this.movieId});
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.blackColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const DetailsHeader(
-              imageUrl: _posterUrl,
-              title: 'Doctor Strange in the Multiverse of Madness',
-              year: '2022',
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: SizeUtils.getWidth(context, 16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(height: SizeUtils.getHeight(context, 16)),
-                  CustomElevatedButton(
-                    onPressed: () {},
-                    backgroundColor: AppColors.redColor,
-                    radius: SizeUtils.getWidth(context, 16),
-                    padding: EdgeInsets.symmetric(
-                      vertical: SizeUtils.getHeight(context, 14),
-                    ),
-                    child: Text('Watch', style: AppStyles.regular20WhiteRoboto),
+      body: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+        builder: (context, state) {
+          return switch (state) {
+            MovieDetailsLoading() => const MainLoadingWidget(),
+            MovieDetailsError(:final message) =>
+                SafeArea(
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                          onPressed: () => Navigator.maybePop(context),
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: AppColors.whiteColor,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: SingleChildScrollView(
+                          child: MainErrorWidget(
+                            errorMessage: message,
+                            onPressed: () =>
+                                context
+                                    .read<MovieDetailsCubit>()
+                                    .loadMovie(movieId),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: SizeUtils.getHeight(context, 16)),
-                  const MovieStatsRow(likes: 15, runtime: 90, rating: 7.6),
-                  sectionGap,
-                  const ScreenshotsSection(imageUrls: _screenshots),
-                  sectionGap,
-                  const SimilarSection(movies: _similar),
-                  sectionGap,
-                  const SummarySection(summary: _summary),
-                  sectionGap,
-                  const CastSection(cast: _cast),
-                  sectionGap,
-                  const GenresSection(genres: _genres),
-                  SizedBox(height: SizeUtils.getHeight(context, 32)),
-                ],
-              ),
+                ),
+            MovieDetailsSuccess(:final movie, :final suggestions) =>
+                _buildContent(context, movie, suggestions),
+          };
+        },
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context,
+      Movie movie,
+      List<SuggestionMovie> suggestions,) {
+    final sectionGap = SizedBox(height: SizeUtils.getHeight(context, 24));
+
+    final screenshots = [
+      movie.largeScreenshotImage1,
+      movie.largeScreenshotImage2,
+      movie.largeScreenshotImage3,
+    ].whereType<String>().where((url) => url.isNotEmpty).toList();
+
+    final cast = (movie.cast ?? [])
+        .map((c) =>
+    (
+    name: c.name ?? '',
+    character: c.characterName ?? '',
+    imageUrl: c.urlSmallImage ?? '',
+    )).toList();
+
+    final similar = suggestions
+        .map((m) =>
+    (
+    id: m.id ?? 0,
+    imageUrl: m.mediumCoverImage ?? '',
+    rating: (m.rating ?? 0).toDouble(),
+    )).toList();
+
+    final summary = (movie.descriptionFull?.isNotEmpty ?? false)
+        ? movie.descriptionFull!
+        : (movie.descriptionIntro ?? '');
+
+    final genres = movie.genres ?? [];
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          DetailsHeader(
+            imageUrl: movie.largeCoverImage ?? '',
+            title: movie.title ?? '',
+            year: '${movie.year ?? ''}',
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: SizeUtils.getWidth(context, 16),
             ),
-          ],
-        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: SizeUtils.getHeight(context, 16)),
+                AppButton(
+                  onPressed: () {},
+                  backgroundColor: AppColors.redColor,
+                  child: Text('Watch', style: AppStyles.regular20WhiteRoboto),
+                ),
+                SizedBox(height: SizeUtils.getHeight(context, 16)),
+                MovieStatsRow(
+                  likes: movie.likeCount ?? 0,
+                  runtime: movie.runtime ?? 0,
+                  rating: (movie.rating ?? 0).toDouble(),
+                ),
+                if (screenshots.isNotEmpty) ...[
+                  sectionGap,
+                  ScreenshotsSection(imageUrls: screenshots),
+                ],
+                if (similar.isNotEmpty) ...[
+                  sectionGap,
+                  SimilarSection(
+                    movies: similar,
+                    onMovieTap: (index) {
+                      final id = suggestions[index].id;
+                      if (id == null) return;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) =>
+                            MovieDetailsScreen(movieId: id)),
+                      );
+                    },
+                  ),
+                ],
+                if (summary.isNotEmpty) ...[
+                  sectionGap,
+                  SummarySection(summary: summary),
+                ],
+                if (cast.isNotEmpty) ...[
+                  sectionGap,
+                  CastSection(cast: cast),
+                ],
+                if (genres.isNotEmpty) ...[
+                  sectionGap,
+                  GenresSection(genres: genres),
+                ],
+                SizedBox(height: SizeUtils.getHeight(context, 32)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

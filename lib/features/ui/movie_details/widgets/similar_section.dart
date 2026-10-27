@@ -4,7 +4,7 @@ import 'package:movie_application/core/utils/size_utils.dart';
 
 import '../../../common/widget/movie_poster_card.dart';
 
-typedef SimilarMovie = ({String imageUrl, double rating});
+typedef SimilarMovie = ({int id, String imageUrl, double rating});
 
 class SimilarSection extends StatelessWidget {
   final List<SimilarMovie> movies;

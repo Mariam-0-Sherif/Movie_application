@@ -10,7 +10,8 @@ import 'package:movie_application/features/ui/home/widgets/genre_section.dart';
 import 'package:movie_application/features/ui/home/widgets/home_header.dart';
 import 'package:movie_application/features/ui/home/widgets/movies_carousel.dart';
 
-import '../../cubit/home_bloc.dart';
+import '../../../movie_details/movie_details_screen.dart';
+import '../../cubit/home_cubit.dart';
 import '../../cubit/home_state.dart';
 
 class HomeTab extends StatelessWidget {
@@ -63,7 +64,10 @@ class _HomeContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          HomeHeader(movies: featured.map(_toCarouselMovie).toList()),
+          HomeHeader(
+            movies: featured.map(_toCarouselMovie).toList(),
+            onMovieTap: (index) => _openDetails(context, featured[index].id),
+          ),
           GenreSection(
             title: 'Action',
             itemCount: action.length,
@@ -73,6 +77,7 @@ class _HomeContent extends StatelessWidget {
                 imageUrl: movie.mediumCoverImage ?? '',
                 rating: movie.rating ?? 0.0,
                 width: 146,
+                onTap: () => _openDetails(context, movie.id),
               );
             },
           ),
@@ -84,8 +89,17 @@ class _HomeContent extends StatelessWidget {
 
   CarouselMovie _toCarouselMovie(Movies movie) {
     return (
-    imageUrl: movie.largeCoverImage ?? movie.mediumCoverImage ?? '',
+      id: movie.id ?? 0,
+      imageUrl: movie.largeCoverImage ?? movie.mediumCoverImage ?? '',
     rating: movie.rating ?? 0.0,
+    );
+  }
+
+  void _openDetails(BuildContext context, int? id) {
+    if (id == null) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => MovieDetailsScreen(movieId: id)),
     );
   }
 }
