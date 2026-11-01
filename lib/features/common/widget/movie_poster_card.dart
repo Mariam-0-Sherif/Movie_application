@@ -37,11 +37,11 @@ class MoviePosterCard extends StatelessWidget {
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, progress) {
                     if (progress == null) return child;
-                    return const ColoredBox(color: AppColors.darkGreyColor);
+                    return const ColoredBox(color: AppColors.greyColor);
                   },
                   errorBuilder: (context, error, stackTrace) {
                     return const ColoredBox(
-                      color: AppColors.darkGreyColor,
+                      color: AppColors.greyColor,
                       child: Icon(
                         Icons.broken_image_outlined,
                         color: AppColors.lightGrayColor,

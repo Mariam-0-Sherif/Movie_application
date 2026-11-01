@@ -14,7 +14,7 @@ class StatChip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: SizeUtils.getHeight(context, 12)),
       decoration: BoxDecoration(
-        color: AppColors.darkGreyColor,
+        color: AppColors.greyColor,
         borderRadius: BorderRadius.circular(SizeUtils.getWidth(context, 16)),
       ),
       child: Row(

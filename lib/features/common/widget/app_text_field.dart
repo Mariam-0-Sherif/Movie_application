@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_styles.dart';
-import 'custom_text_form_field.dart';
+import '../../../core/widget/custom_text_form_field.dart';
 
 class AppTextField extends StatelessWidget {
   final String? hint;
@@ -28,8 +28,8 @@ class AppTextField extends StatelessWidget {
     return CustomTextFormField(
       controller: controller,
       filled: true,
-      fillColor: AppColors.darkGreyColor,
-      borderSideColor: AppColors.darkGreyColor,
+      fillColor: AppColors.greyColor,
+      borderSideColor: AppColors.greyColor,
       cursorColor: AppColors.whiteColor,
       style: AppStyles.regular16WhiteRoboto,
       hintText: hint,

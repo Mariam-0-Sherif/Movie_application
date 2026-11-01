@@ -39,7 +39,7 @@ class _CastTile extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(SizeUtils.getWidth(context, 8)),
       decoration: BoxDecoration(
-        color: AppColors.darkGreyColor,
+        color: AppColors.greyColor,
         borderRadius: BorderRadius.circular(SizeUtils.getWidth(context, 16)),
       ),
       child: Row(

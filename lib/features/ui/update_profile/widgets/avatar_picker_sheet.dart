@@ -44,7 +44,7 @@ class AvatarPickerSheet extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(padding),
           decoration: BoxDecoration(
-            color: AppColors.darkGreyColor,
+            color: AppColors.greyColor,
             borderRadius: radius,
           ),
           child: GridView.builder(

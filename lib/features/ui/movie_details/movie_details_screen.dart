@@ -10,7 +10,7 @@ import 'package:movie_application/features/ui/movie_details/widgets/screenshots_
 import 'package:movie_application/features/ui/movie_details/widgets/similar_section.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/summary_section.dart';
 
-import '../../common/widget/custom_elevated_button.dart';
+import '../../../core/widget/custom_elevated_button.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
   const MovieDetailsScreen({super.key});

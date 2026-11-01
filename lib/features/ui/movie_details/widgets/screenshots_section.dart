@@ -28,7 +28,7 @@ class ScreenshotsSection extends StatelessWidget {
                 url,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
-                  return const ColoredBox(color: AppColors.darkGreyColor);
+                  return const ColoredBox(color: AppColors.greyColor);
                 },
               ),
             ),

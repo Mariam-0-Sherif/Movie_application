@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_application/core/utils/app_images.dart';
 import 'package:movie_application/core/utils/app_styles.dart';
 import 'package:movie_application/core/utils/validators.dart';
-import 'package:movie_application/features/common/widget/custom_image_asset.dart';
+import 'package:movie_application/core/widget/custom_image_asset.dart';
 import 'package:movie_application/features/ui/auth/register/widget/choose_avatar.dart';
 
 import '../../../../core/utils/app_colors.dart';

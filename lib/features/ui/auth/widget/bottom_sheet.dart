@@ -6,7 +6,7 @@ import '../../../../core/utils/app_styles.dart';
 void showLanguageSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
-    backgroundColor: AppColors.darkGreyColor,
+    backgroundColor: AppColors.greyColor,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),

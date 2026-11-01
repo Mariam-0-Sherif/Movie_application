@@ -12,7 +12,7 @@ import '../../../../core/utils/app_routes.dart';
 import '../../../../core/utils/size_utils.dart';
 import '../../../common/widget/app_button.dart';
 import '../../../common/widget/app_text_field.dart';
-import '../../../common/widget/custom_image_asset.dart';
+import '../../../../core/widget/custom_image_asset.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
