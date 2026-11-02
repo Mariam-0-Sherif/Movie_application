@@ -5,9 +5,9 @@ import '../../../../core/utils/app_images.dart';
 import '../../../../core/utils/app_styles.dart';
 import '../../../../core/utils/size_utils.dart';
 import '../../../../core/utils/validators.dart';
+import '../../../../core/widget/custom_image_asset.dart';
 import '../../../common/widget/app_button.dart';
 import '../../../common/widget/app_text_field.dart';
-import '../../../common/widget/custom_image_asset.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});

@@ -30,7 +30,7 @@ class DetailsHeader extends StatelessWidget {
             imageUrl,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
-              return const ColoredBox(color: AppColors.darkGreyColor);
+              return const ColoredBox(color: AppColors.greyColor);
             },
           ),
           DecoratedBox(

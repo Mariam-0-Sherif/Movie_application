@@ -29,7 +29,7 @@ class GenresSection extends StatelessWidget {
                 ),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.darkGreyColor,
+                  color: AppColors.greyColor,
                   borderRadius: BorderRadius.circular(
                     SizeUtils.getWidth(context, 8),
                   ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_images.dart';
-import 'package:movie_application/features/common/widget/custom_image_asset.dart';
+import 'package:movie_application/core/widget/custom_image_asset.dart';
 
 import '../../../../common/widget/app_text_field.dart';
 

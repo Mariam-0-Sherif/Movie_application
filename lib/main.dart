@@ -4,6 +4,7 @@ import 'package:movie_application/features/ui/auth/forget_password/forget_passwo
 import 'package:movie_application/features/ui/auth/login/login_screen.dart';
 import 'package:movie_application/features/ui/auth/register/register_screen.dart';
 import 'package:movie_application/features/ui/home/home_screen.dart';
+import 'package:movie_application/features/ui/home/tabs/profile_tab/profile_tab.dart';
 
 import 'core/utils/app_routes.dart';
 import 'core/utils/app_theme.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.forgetPasswordRouteName: (context) => ForgetPasswordScreen(),
         AppRoutes.updateProfileRouteName: (context) => UpdateProfileScreen(),
         AppRoutes.registerRouteName: (context) => RegisterScreen(),
+        AppRoutes.profileRouteName: (context) => ProfileTab(),
       },
       theme: AppTheme.darkTheme,
     );

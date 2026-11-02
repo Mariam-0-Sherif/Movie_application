@@ -6,9 +6,9 @@ import 'package:movie_application/features/ui/update_profile/widgets/avatar_pick
 
 import '../../../core/utils/app_images.dart';
 import '../../../core/utils/validators.dart';
+import '../../../core/widget/custom_image_asset.dart';
 import '../../common/widget/app_button.dart';
 import '../../common/widget/app_text_field.dart';
-import '../../common/widget/custom_image_asset.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
