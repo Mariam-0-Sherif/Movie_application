@@ -1,58 +1,124 @@
+import 'package:flutter/material.dart';
+import 'package:movie_application/core/utils/app_colors.dart';
+import 'package:movie_application/core/utils/app_styles.dart';
+import 'package:movie_application/core/utils/size_utils.dart';
 
-import 'package:dio/dio.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_application/api/dio/dio_manager.dart';
-import 'package:movie_application/api/model/movies/movies.dart';
-import '../../home/cubit/home_state.dart';
+class DetailsHeader extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+  final String year;
+  final VoidCallback? onBookmark;
+  final VoidCallback? onPlay;
+  final bool isBookmarked;
 
-class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(HomeLoading());
+  const DetailsHeader({
+    super.key,
+    required this.imageUrl,
+    required this.title,
+    required this.year,
+    this.onBookmark,
+    this.onPlay,
+    this.isBookmarked = false,
+  });
 
-  static const String _actionGenre = 'Action';
-
-  Future<void> loadHome() async {
-    emit(HomeLoading());
-    try {
-      final responses = await Future.wait([
-        DioManager.getMovie(limit: 5, sortBy: 'download_count'),
-        DioManager.getMovie(
-          genre: _actionGenre,
-          limit: 10,
-          sortBy: 'download_count',
-        ),
-      ]);
-      if (isClosed) return;
-      emit(
-        HomeSuccess(
-          featured: _withPoster(responses[0].data?.movies),
-          action: _withPoster(responses[1].data?.movies),
-        ),
-      );
-    } on DioException catch (error) {
-      if (isClosed) return;
-      emit(HomeError(_messageFor(error)));
-    } catch (_) {
-      if (isClosed) return;
-      emit(HomeError('Something went wrong, please try again'));
-    }
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: SizeUtils.getHeight(context, 620),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return const ColoredBox(color: AppColors.greyColor);
+            },
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  AppColors.blackColor.withValues(alpha: 0.55),
+                  AppColors.transparentColor,
+                  AppColors.blackColor.withValues(alpha: 0.75),
+                  AppColors.blackColor,
+                ],
+                stops: const [0, 0.35, 0.75, 1],
+              ),
+            ),
+          ),
+          _buildTopBar(context),
+          Align(
+            alignment: const Alignment(0, -0.2),
+            child: GestureDetector(
+              onTap: onPlay,
+              child: Icon(
+                Icons.play_circle_outline_rounded,
+                color: AppColors.yellowColor,
+                size: SizeUtils.getWidth(context, 96),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: SizeUtils.getWidth(context, 16),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: AppStyles.bold20WhiteRoboto,
+                  ),
+                  SizedBox(height: SizeUtils.getHeight(context, 12)),
+                  Text(year, style: AppStyles.regular16WhiteRoboto),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  List<Movies> _withPoster(List<Movies>? movies) {
-    return (movies ?? [])
-        .where((movie) => (movie.mediumCoverImage ?? '').isNotEmpty)
-        .toList();
-  }
-
-  String _messageFor(DioException error) {
-    switch (error.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-        return 'The connection timed out, please try again';
-      case DioExceptionType.connectionError:
-        return 'No internet connection';
-      default:
-        return 'Something went wrong, please try again';
-    }
+  Widget _buildTopBar(BuildContext context) {
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: SizeUtils.getWidth(context, 8),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                onPressed: () => Navigator.maybePop(context),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: AppColors.whiteColor,
+                ),
+              ),
+              IconButton(
+                onPressed: onBookmark,
+                icon: Icon(
+                  isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                  color: AppColors.whiteColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
