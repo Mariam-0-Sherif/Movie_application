@@ -11,6 +11,7 @@ class DioManager {
   //https://movies-api.accel.li/api/v2/list_movies.json?quality=3D
   static Future<MovieResponse> getMovie({
     String? genre,
+    String? queryTerm,
     int limit = 10,
     String sortBy = 'date_added',
   }) async {
@@ -20,7 +21,9 @@ class DioManager {
         queryParameters: {
           'limit': limit,
           'sort_by': sortBy,
-          'genre': ?genre},
+          'genre': ?genre,
+          'query_term': ?queryTerm,
+        },
       );
       return MovieResponse.fromJson(response.data);
     } catch (e) {
