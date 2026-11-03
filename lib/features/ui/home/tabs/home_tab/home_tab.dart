@@ -11,8 +11,8 @@ import 'package:movie_application/features/ui/home/widgets/home_header.dart';
 import 'package:movie_application/features/ui/home/widgets/movies_carousel.dart';
 
 import '../../../movie_details/movie_details_screen.dart';
-import '../../cubit/home_cubit.dart';
-import '../../cubit/home_state.dart';
+import 'cubit/home_cubit.dart';
+import 'cubit/home_state.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});

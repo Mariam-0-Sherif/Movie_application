@@ -1,54 +1,36 @@
-
 import 'package:flutter/material.dart';
-import 'package:movie_application/api/model/movie_details/movie.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab/repository/profile_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_application/features/common/widget/movie_poster_card.dart';
 
-class HistoryTab extends StatefulWidget {
+import '../../../../../../core/utils/app_styles.dart';
+import 'cubit/history_cubit.dart';
+import 'cubit/history_state.dart';
+
+class HistoryTab extends StatelessWidget {
   const HistoryTab({super.key});
 
   @override
-  State<HistoryTab> createState() => _HistoryTabState();
-}
-
-class _HistoryTabState extends State<HistoryTab> {
-  late final ProfileRepository _repository;
-  late final Stream<List<Movie>> _historyStream;
-
-  @override
-  void initState() {
-    super.initState();
-    _repository = ProfileRepository();
-    _historyStream = _repository.getHistory();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Movie>>(
-      stream: _historyStream,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+    return BlocBuilder<HistoryCubit, HistoryState>(
+      builder: (context, state) {
+        if (state is HistoryInitial || state is HistoryLoading) {
+          return const Center(child: CircularProgressIndicator());
         }
-
-        if (snapshot.hasError) {
-          return const Center(
+        if (state is HistoryError) {
+          return Center(
             child: Text(
               'Something went wrong',
-              style: TextStyle(color: Colors.white),
+              style: AppStyles.regular20WhiteRoboto,
             ),
           );
         }
-
-        final movies = snapshot.data ?? [];
+        final movies = (state as HistorySuccess).movies;
 
         if (movies.isEmpty) {
-          return const Center(
+          return Center(
             child: Text(
               'Your History Is Empty',
-              style: TextStyle(color: Colors.white),
+              style: AppStyles.regular20WhiteRoboto,
             ),
           );
         }
@@ -64,7 +46,6 @@ class _HistoryTabState extends State<HistoryTab> {
           ),
           itemBuilder: (context, index) {
             final movie = movies[index];
-
             return MoviePosterCard(
               imageUrl: movie.mediumCoverImage ?? '',
               rating: (movie.rating ?? 0).toDouble(),

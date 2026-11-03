@@ -1,5 +1,5 @@
-
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_application/api/model/movie_details/movie.dart';
@@ -9,6 +9,7 @@ import 'package:movie_application/core/utils/app_styles.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
 import 'package:movie_application/features/common/utils/main_error_widget.dart';
 import 'package:movie_application/features/common/utils/main_loading_widget.dart';
+import 'package:movie_application/features/ui/home/tabs/profile_tab/repository/profile_repository.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/cast_section.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/details_header.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/genres_section.dart';
@@ -16,10 +17,10 @@ import 'package:movie_application/features/ui/movie_details/widgets/movie_stats_
 import 'package:movie_application/features/ui/movie_details/widgets/screenshots_section.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/similar_section.dart';
 import 'package:movie_application/features/ui/movie_details/widgets/summary_section.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab/repository/profile_repository.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab/cubit/watchlist_cubit.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab/cubit/watchlist_state.dart';
+
 import '../../common/widget/app_button.dart';
+import '../home/tabs/profile_tab/watch_tab/cubit/watchlist_cubit.dart';
+import '../home/tabs/profile_tab/watch_tab/cubit/watchlist_state.dart';
 import 'cubit/movie_details_cubit.dart';
 import 'cubit/movie_details_state.dart';
 

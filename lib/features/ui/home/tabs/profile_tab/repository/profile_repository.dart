@@ -1,12 +1,12 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movie_application/api/model/movie_details/movie.dart';
 
+import '../model/profile_data.dart';
+
 class ProfileRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
-
   ProfileRepository({
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
@@ -44,8 +44,6 @@ class ProfileRepository {
     };
   }
 
-  // Watchlist
-
   Future<void> addToWatchlist(Movie movie) async {
     if (movie.id == null) {
       throw Exception('Movie ID is missing');
@@ -77,8 +75,6 @@ class ProfileRepository {
     );
   }
 
-  // History
-
   Future<void> addToHistory(Movie movie) async {
     if (movie.id == null) {
       throw Exception('Movie ID is missing');
@@ -99,5 +95,40 @@ class ProfileRepository {
           .map((doc) => Movie.fromJson(doc.data()))
           .toList(),
     );
+  }
+
+  DocumentReference<Map<String, dynamic>> get _userDoc =>
+      _firestore.collection('users').doc(_uid);
+
+  Future<ProfileData> getProfile() async {
+    final doc = await _userDoc.get();
+    final data = doc.data();
+
+    if (data == null) {
+      return ProfileData(
+        name: _auth.currentUser?.displayName ?? ProfileData.initial.name,
+        phone: ProfileData.initial.phone,
+        avatarIndex: ProfileData.initial.avatarIndex,
+      );
+    }
+    return ProfileData(
+      name: data['name'] ?? ProfileData.initial.name,
+      phone: data['phone'] ?? ProfileData.initial.phone,
+      avatarIndex: ((data['avatarIndex'] ?? data['avatar']) as num?)?.toInt() ??
+          ProfileData.initial.avatarIndex,
+    );
+  }
+
+  Future<void> updateProfile({
+    required String name,
+    required String phone,
+    required int avatarIndex,
+  }) async {
+    await _userDoc.set({
+      'name': name,
+      'phone': phone,
+      'avatarIndex': avatarIndex,
+    }, SetOptions(merge: true));
+    await _auth.currentUser?.updateDisplayName(name);
   }
 }

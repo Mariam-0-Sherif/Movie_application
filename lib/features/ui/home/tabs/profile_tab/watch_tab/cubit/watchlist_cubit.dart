@@ -1,10 +1,9 @@
-
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_application/api/model/movie_details/movie.dart';
 
-import '../repository/profile_repository.dart';
+import '../../repository/profile_repository.dart';
 import 'watchlist_state.dart';
 
 class WatchlistCubit extends Cubit<WatchlistState> {
