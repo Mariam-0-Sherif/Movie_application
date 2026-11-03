@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_application/api/model/movie_details/movie.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab/cubit/watchlist_cubit.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab/cubit/watchlist_state.dart';
 import 'package:movie_application/features/common/widget/movie_poster_card.dart';
+
+import 'cubit/watchlist_cubit.dart';
+import 'cubit/watchlist_state.dart';
 class WatchTab extends StatelessWidget {
   const WatchTab({super.key});
 

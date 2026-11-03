@@ -3,22 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/features/ui/home/tabs/profile_tab/history_tab/history_tab.dart';
+import 'package:movie_application/features/ui/home/tabs/profile_tab/repository/profile_repository.dart';
+import 'package:movie_application/features/ui/home/tabs/profile_tab/watch_tab/cubit/watchlist_cubit.dart';
 import 'package:movie_application/features/ui/home/tabs/profile_tab/watch_tab/watch_tab.dart';
 import 'package:movie_application/features/ui/home/tabs/profile_tab/widgets/profile_header.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab/repository/profile_repository.dart';
-import 'package:movie_application/features/ui/home/tabs/profile_tab/cubit/watchlist_cubit.dart';
 
 import '../../../../../core/utils/app_images.dart';
 import '../../../../../core/utils/app_styles.dart';
 import '../../../../../core/widget/custom_image_asset.dart';
+import 'history_tab/cubit/history_cubit.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => WatchlistCubit(ProfileRepository()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => WatchlistCubit(ProfileRepository())),
+        BlocProvider(create: (_) => HistoryCubit(ProfileRepository())),
+      ],
       child: DefaultTabController(
         length: 2,
         child: Scaffold(

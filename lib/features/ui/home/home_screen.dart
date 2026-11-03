@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_images.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
 import 'package:movie_application/core/widget/custom_image_asset.dart';
 import 'package:movie_application/features/ui/home/tabs/explore_tab/explore_tab.dart';
 import 'package:movie_application/features/ui/home/tabs/home_tab/home_tab.dart';
+import 'package:movie_application/features/ui/home/tabs/profile_tab/cubit/profile_cubit.dart';
 import 'package:movie_application/features/ui/home/tabs/profile_tab/profile_tab.dart';
 import 'package:movie_application/features/ui/home/tabs/search_tab/search_tab.dart';
 
@@ -24,6 +26,12 @@ class _HomeScreenState extends State<HomeScreen> {
     ExploreTab(),
     ProfileTab(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileCubit>().load();
+  }
 
   @override
   Widget build(BuildContext context) {

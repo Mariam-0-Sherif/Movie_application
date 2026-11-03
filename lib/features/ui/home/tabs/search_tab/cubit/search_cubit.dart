@@ -12,8 +12,6 @@ class SearchCubit extends Cubit<SearchState> {
   String _query = '';
   int _requestId = 0;
 
-  /// Waits a moment after the last key press so we don't send a request
-  /// for every letter.
   void onQueryChanged(String value) {
     final text = value.trim();
     if (text == _query) return;
@@ -21,7 +19,6 @@ class SearchCubit extends Cubit<SearchState> {
     _debounce?.cancel();
 
     if (text.isEmpty) {
-      // Makes any response that is still on its way get ignored.
       _requestId++;
       emit(SearchInitial());
       return;

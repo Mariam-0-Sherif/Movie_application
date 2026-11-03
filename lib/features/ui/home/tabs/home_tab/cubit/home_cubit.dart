@@ -1,5 +1,5 @@
-
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_application/api/dio/dio_manager.dart';
 import 'package:movie_application/api/model/movies/movies.dart';
@@ -14,27 +14,49 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> loadHome() async {
     emit(HomeLoading());
     try {
-      final responses = await Future.wait([
-        DioManager.getMovie(limit: 5, sortBy: 'download_count'),
-        DioManager.getMovie(
+      final featuredResponse = await _safeCall(
+        'FEATURED',
+        () => DioManager.getMovie(limit: 5, sortBy: 'download_count'),
+      );
+      final actionResponse = await _safeCall(
+        'ACTION',
+        () => DioManager.getMovie(
           genre: _actionGenre,
           limit: 10,
           sortBy: 'download_count',
         ),
-      ]);
+      );
+
       if (isClosed) return;
+
       emit(
         HomeSuccess(
-          featured: _withPoster(responses[0].data?.movies),
-          action: _withPoster(responses[1].data?.movies),
+          featured: _withPoster(featuredResponse.data?.movies),
+          action: _withPoster(actionResponse.data?.movies),
         ),
       );
     } on DioException catch (error) {
+      debugPrint('DIO ERROR TYPE: ${error.type}');
+      debugPrint('DIO STATUS: ${error.response?.statusCode}');
+      debugPrint('DIO DATA: ${error.response?.data}');
+      debugPrint('DIO MESSAGE: ${error.message}');
       if (isClosed) return;
       emit(HomeError(_messageFor(error)));
-    } catch (_) {
+    } catch (e, stackTrace) {
+      debugPrint('UNKNOWN ERROR: $e');
+      debugPrint('STACK TRACE: $stackTrace');
       if (isClosed) return;
       emit(HomeError('Something went wrong, please try again'));
+    }
+  }
+
+  Future<T> _safeCall<T>(String name, Future<T> Function() call) async {
+    try {
+      return await call();
+    } catch (e, st) {
+      debugPrint('>>> REQUEST "$name" FAILED: $e');
+      debugPrint('>>> $st');
+      rethrow;
     }
   }
 
@@ -52,6 +74,8 @@ class HomeCubit extends Cubit<HomeState> {
         return 'The connection timed out, please try again';
       case DioExceptionType.connectionError:
         return 'No internet connection';
+      case DioExceptionType.badResponse:
+        return 'Server error (${error.response?.statusCode}), please try again';
       default:
         return 'Something went wrong, please try again';
     }

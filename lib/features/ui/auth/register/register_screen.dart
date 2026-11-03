@@ -196,7 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'name': nameController.text.trim(),
         'email': emailController.text.trim(),
         'phone': phoneController.text.trim(),
-        'avatar': selectedAvatar,
+        'avatarIndex': selectedAvatar,
       });
       if (!mounted) return;
       Navigator.pushNamedAndRemoveUntil(

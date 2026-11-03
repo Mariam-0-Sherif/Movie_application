@@ -1,14 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_application/core/utils/app_colors.dart';
 import 'package:movie_application/core/utils/app_styles.dart';
 import 'package:movie_application/core/utils/size_utils.dart';
 import 'package:movie_application/features/ui/update_profile/widgets/avatar_picker_sheet.dart';
 
 import '../../../core/utils/app_images.dart';
+import '../../../core/utils/app_routes.dart';
 import '../../../core/utils/validators.dart';
 import '../../../core/widget/custom_image_asset.dart';
 import '../../common/widget/app_button.dart';
 import '../../common/widget/app_text_field.dart';
+import '../home/tabs/profile_tab/cubit/profile_cubit.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -19,13 +24,20 @@ class UpdateProfileScreen extends StatefulWidget {
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController(
-    text: 'John Safwat',
-  );
-  final TextEditingController _phoneController = TextEditingController(
-    text: '01200000000',
-  );
-  int _avatarIndex = 0;
+  late final TextEditingController _nameController;
+  late final TextEditingController _phoneController;
+  late int _avatarIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    final profile = context
+        .read<ProfileCubit>()
+        .state;
+    _nameController = TextEditingController(text: profile.name);
+    _phoneController = TextEditingController(text: profile.phone);
+    _avatarIndex = profile.avatarIndex;
+  }
   @override
   void dispose() {
     _nameController.dispose();
@@ -97,7 +109,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 ),
               ),
               AppButton(
-                  onPressed: () {},
+                  onPressed: deleteAccount,
                   backgroundColor: AppColors.redColor,
                   child: Text('Delete Account',
                     style: AppStyles.regular16WhiteRoboto,
@@ -125,7 +137,72 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     setState(() => _avatarIndex = picked);
   }
 
-  void _updateData() {
+  Future<void> _updateData() async {
     if (!_formKey.currentState!.validate()) return;
+
+    try {
+      await context.read<ProfileCubit>().update(
+        name: _nameController.text.trim(),
+        phone: _phoneController.text.trim(),
+        avatarIndex: _avatarIndex,
+      );
+      if (!mounted) return;
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update profile: $e')),
+      );
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) =>
+          AlertDialog(
+            title: const Text('Delete Account'),
+            content: const Text('Are you sure? This cannot be undone.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+    );
+    if (confirmed != true) return;
+
+    try {
+      final user = FirebaseAuth.instance.currentUser!;
+      final uid = user.uid;
+      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+      await user.delete();
+
+      if (!mounted) return;
+
+      context.read<ProfileCubit>().reset();
+
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.loginRouteName,
+            (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      final msg = e.code == 'requires-recent-login'
+          ? 'Please log out and log in again, then try deleting your account'
+          : (e.message ?? 'Delete failed');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    } on FirebaseException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message ?? 'Delete failed')),
+      );
+    }
   }
 }
