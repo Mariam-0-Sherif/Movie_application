@@ -9,6 +9,7 @@ class DetailsHeader extends StatelessWidget {
   final String year;
   final VoidCallback? onBookmark;
   final VoidCallback? onPlay;
+  final bool isBookmarked;
 
   const DetailsHeader({
     super.key,
@@ -17,6 +18,7 @@ class DetailsHeader extends StatelessWidget {
     required this.year,
     this.onBookmark,
     this.onPlay,
+    this.isBookmarked = false,
   });
 
   @override
@@ -108,7 +110,10 @@ class DetailsHeader extends StatelessWidget {
               ),
               IconButton(
                 onPressed: onBookmark,
-                icon: const Icon(Icons.bookmark, color: AppColors.whiteColor),
+                icon: Icon(
+                  isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                  color: AppColors.whiteColor,
+                ),
               ),
             ],
           ),
